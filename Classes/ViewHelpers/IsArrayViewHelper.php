@@ -1,33 +1,23 @@
 <?php
+
 namespace Typoheads\Formhandler\ViewHelpers;
 
-/*
- * This file is part of the TYPO3 CMS project.
- *
- * It is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License, either version 2
- * of the License, or any later version.
- *
- * For the full copyright and license information, please read the
- * LICENSE.txt file that was distributed with this source code.
- *
- * The TYPO3 project - inspiring people to share!
- */
-class IsArrayViewHelper extends \TYPO3Fluid\Fluid\ViewHelpers\IfViewHelper
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
+
+class IsArrayViewHelper extends AbstractViewHelper
 {
+    public function initializeArguments()
+    {
+        parent::initializeArguments();
+
+        $this->registerArgument('value', 'mixed', 'the value to test for arrayness', true);
+    }
 
     /**
-     * Renders <f:then> child if $condition is true, otherwise renders <f:else> child.
-     *
-     * @return string the rendered string
-     * @api
+     * @return bool
      */
     public function render()
     {
-        if (isset($arguments['condition']) && (true === is_array($arguments['value']))) {
-            return $this->renderThenChild();
-        } else {
-            return $this->renderElseChild();
-        }
+        return isset($this->arguments['value']) && is_array($this->arguments['value']);
     }
 }

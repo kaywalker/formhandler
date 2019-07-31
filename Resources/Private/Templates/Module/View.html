@@ -32,7 +32,7 @@
 							<tr>
 								<td class="col-xs-3">{field}</td>
 								<td class="col-xs-9">
-									<fh:isArray condition="{value}">
+									<f:if condition="{fh:isArray(value: value)}">
 										<f:then>
 											<ul>
 												<f:if condition="{value -> f:count()} > 0">
@@ -45,7 +45,7 @@
 										<f:else>
 											{value}
 										</f:else>
-									</fh:isArray>
+									</f:if>
 								</td>
 							</tr>
 						</f:for>
