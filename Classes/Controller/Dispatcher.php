@@ -1,4 +1,5 @@
 <?php
+
 namespace Typoheads\Formhandler\Controller;
 
 /*                                                                        *
@@ -13,14 +14,15 @@ namespace Typoheads\Formhandler\Controller;
  * TABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General      *
  * Public License for more details.                                       *
  *                                                                        */
+
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use Psr\Log\LoggerInterface;
 
 /**
  * The Dispatcher instantiates the Component Manager and delegates the process to the given controller.
  */
 class Dispatcher extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
 {
-
     /**
      * Compontent Manager
      *
@@ -28,7 +30,6 @@ class Dispatcher extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
      * @var \Typoheads\Formhandler\Component\Manager
      */
     protected $componentManager;
-
     /**
      * The global Formhandler values
      *
@@ -36,7 +37,6 @@ class Dispatcher extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
      * @var \Typoheads\Formhandler\Utility\Globals
      */
     protected $globals;
-
     /**
      * The Formhandler utility functions
      *
@@ -48,9 +48,9 @@ class Dispatcher extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
     /**
      * Main method of the dispatcher. This method is called as a user function.
      *
-     * @return string rendered view
      * @param string $content
      * @param array $setup The TypoScript config
+     * @return string rendered view
      */
     public function main($content, $setup)
     {
@@ -113,6 +113,10 @@ class Dispatcher extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
 
             $result = $controller->process();
         } catch (\Exception $e) {
+            /** @var LoggerInterface $logger */
+            $logger = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Log\LogManager::class)->getLogger(__CLASS__);
+            $logger->error($e->getFile() . '(' . $e->getLine() . ')' . ' ' . $e->getMessage());
+
             \TYPO3\CMS\Core\Utility\GeneralUtility::sysLog(
                 $e->getFile() . '(' . $e->getLine() . ')' . ' ' . $e->getMessage(),
                 'formhandler',
